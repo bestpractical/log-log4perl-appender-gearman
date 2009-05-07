@@ -44,7 +44,6 @@ if you don't export anything, such as for a purely object-oriented module.
 sub new {
     my ($class, %opt) = @_;
     $opt{job_servers} = [ split /,/, $opt{job_servers} ];
-#    die Dumper(\%opt);use Data::Dumper;
     my $self = bless {
         %opt,
         backlog => [],
@@ -57,18 +56,16 @@ sub new {
 
 sub log {
     my ($self, %params) = @_;
-    warn Dumper(\%params);use Data::Dumper;
+
     # process backblog
     my $defer = 0;
     for (@{$self->{backlog}}) {
-        warn "--> backlogging";
         $self->{gearman_client}->dispatch_background( $_ )
             or $defer = 1, last;
     }
     my $msg = join('|', @params{qw(log4p_level log4p_category message)});
     my $task = Gearman::Task->new($self->{jobname}, \$msg );
 
-    warn "defer = $defer";
     if ( $defer ) {
         push @{$self->{backlog}}, $task;
         return;
@@ -76,6 +73,8 @@ sub log {
 
     unless ( $self->{gearman_client}->dispatch_background( $task ) ) {
         push @{$self->{backlog}}, $task;
+        # XXX: or send to some fallback logger and make sure it
+        # doesn't create a loop
         warn "unable to send log";
     }
 }
