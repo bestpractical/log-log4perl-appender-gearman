@@ -1,9 +1,6 @@
 .shipit
 bin/gearman-logger
 Changes
-gt-debug.log
-gt-order.log
-gt.log
 inc/Module/Install.pm
 inc/Module/Install/AuthorTests.pm
 inc/Module/Install/Base.pm
@@ -22,7 +19,6 @@ MANIFEST			This list of files
 META.yml
 README
 t/basic.t
-t/gearmand.pid
 xt/perlcritic.t
 xt/pod.t
 xt/podspell.t
