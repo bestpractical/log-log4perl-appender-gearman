@@ -1,21 +1,12 @@
-use strict;
-use warnings;
-use ExtUtils::MakeMaker;
-
-WriteMakefile(
-    NAME                => 'Log::Log4perl::Appender::Gearman',
-    AUTHOR              => 'Chia-liang Kao <clako@clkao.org>',
-    VERSION_FROM        => 'lib/Log/Log4perl/Appender/Gearman.pm',
-    ABSTRACT_FROM       => 'lib/Log/Log4perl/Appender/Gearman.pm',
-    ($ExtUtils::MakeMaker::VERSION >= 6.3002
-      ? ('LICENSE'=> 'perl')
-      : ()),
-    PL_FILES            => {},
-    PREREQ_PM => {
-        'Test::More'      => 0,
-        'Gearman::Client' => 0,
-        'Log::Log4perl'   => 0,
-    },
-    dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'Log-Log4perl-Appender-Gearman-*' },
-);
+sub readme_from {}; sub auto_include_deps {}; sub author_tests {}; sub auto_set_repository {};
+use inc::Module::Install;
+name 'Log-Log4perl-Appender-Gearman';
+all_from 'lib/Log/Log4perl/Appender/Gearman.pm',
+readme_from 'lib/Log/Log4perl/Appender/Gearman.pm',
+build_requires 'Test::More';
+requires 'Gearman::Client';
+requires 'Log::Log4perl';
+auto_include_deps;
+author_tests('xt');
+auto_set_repository;
+WriteAll;

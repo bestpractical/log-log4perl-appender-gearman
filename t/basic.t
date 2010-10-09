@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
-use Test::More tests => 2;
+use Test::More;
 use Log::Log4perl;
 use File::Spec;
 use Gearman::Worker;
@@ -18,10 +18,10 @@ log4perl.appender.GM.layout = Log::Log4perl::Layout::PatternLayout
 log4perl.appender.GM.layout.ConversionPattern=%m
 
 );
-ok(Log::Log4perl::init( \$conf ));
 
 my @received;
 start_gearmand($port);
+ok(Log::Log4perl::init( \$conf ));
 
 my $worker = Gearman::Worker->new;
 $worker->job_servers("127.0.0.1:$port");
@@ -46,7 +46,7 @@ sub start_gearmand {
     my $port = shift;
     my $gearmand_pid;
     my $gearmand = can_run('gearmand')
-        or die "Can't find gearmand";
+        or plan skip_all => "Can't find gearmand";
 
     system($gearmand, -p => $port, '-d', '--pidfile' => abs_path("t/gearmand.pid"));
     die $! if $?;
@@ -79,3 +79,5 @@ sub can_run {
 
     return;
 }
+
+done_testing;
